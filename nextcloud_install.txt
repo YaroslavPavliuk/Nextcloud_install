@@ -42,7 +42,7 @@
 
         Reload privilege tables now? [Y/n]: y
 
-    3.  Создаем базу данных NextCloud
+    3. Создаем базу данных NextCloud
 
         sudo mariadb
 
@@ -54,7 +54,110 @@
 
         exit
 
+04. Установка NextCloud
 
+    1. Ставим основные компненты php
 
+        sudo apt install php php-apcu php-bcmath php-cli php-common php-curl php-gd php-gmp php-imagick php-intl php-mbstring php-mysql php-zip php-xml
+
+    2. Enable PHP extensions
+
+        sudo phpenmod bcmath gmp imagick intl
+    
+    3. Скачиваем и распаковываем дистрибутив nextcloud
+
+        wget https://download.nextcloud.com/server/releases/latest.zip
+
+        unzip latest.zip
+
+        sudo mv nextcloud /var/www/
+
+        rm latest.zip
+    
+    4. Сменяем владельца папки nextcloud
+
+        sudo chown -R www-data:www-data /var/www/nextcloud/
+    
+    5. apache2 disable default site
+
+        sudo a2dissite 000-default.conf
+
+    6. Создаем новый конфиг для nextcloud
+
+        sudo vim /etc/apache2/sites-available/nextcloud.conf # И вставляем следующий файл
+
+        <VirtualHost *:80>
+            DocumentRoot "/var/www/nextcloud"
+            ServerName cloud
+
+            <Directory "/var/www/nextcloud/">
+                Options MultiViews FollowSymlinks
+                AllowOverride All
+                Order allow,deny
+                Allow from all
+            </Directory>
+
+            TransferLog /var/log/apache2/nextcloud.log
+            ErrorLog /var/log/apache2/nextcloud.log
+
+        </VirtualHost>
+
+    Сохранияем и выходим.
+
+    7. apache2 enable nextcloud site
+
+        sudo a2ensite nextcloud.conf
+
+    8. Конфигурирование appache сервера
+
+        sudo nano /etc/php/8.2/apache2/php.ini
+
+       # провести проверку текущих настроек через cat
+
+        cat /etc/php/8.2/apache2/php.ini | grep 'memory_limit = '
+        cat /etc/php/8.2/apache2/php.ini | grep 'upload_max_filesize ='
+        cat /etc/php/8.2/apache2/php.ini | grep 'max_execution_time ='
+        cat /etc/php/8.2/apache2/php.ini | grep 'post_max_size ='
+        cat /etc/php/8.2/apache2/php.ini | grep 'date.timezone ='
+        cat /etc/php/8.2/apache2/php.ini | grep 'opcache.enable='
+        cat /etc/php/8.2/apache2/php.ini | grep 'opcache.interned_strings_buffer='
+        cat /etc/php/8.2/apache2/php.ini | grep 'opcache.max_accelerated_files='
+        cat /etc/php/8.2/apache2/php.ini | grep 'opcache.memory_consumption='
+        cat /etc/php/8.2/apache2/php.ini | grep 'opcache.save_comments='
+        cat /etc/php/8.2/apache2/php.ini | grep 'opcache.revalidate_freq='
        
+       # заменить требуемые строки настроек
 
+        sudo sed -i 's/memory_limit = 128M/memory_limit = 512M/g' /etc/php/8.2/apache2/php.ini
+        sudo sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 200M/g' /etc/php/8.2/apache2/php.ini
+        sudo sed -i 's/max_execution_time = 30/max_execution_time = 360/g' /etc/php/8.2/apache2/php.ini
+        sudo sed -i 's/post_max_size = 8M/post_max_size = 200M/g' /etc/php/8.2/apache2/php.ini
+        sudo sed -i 's/;date.timezone =/date.timezone = Europe\/Kiev/g' /etc/php/8.2/apache2/php.ini
+        sudo sed -i 's/;opcache.enable=1/opcache.enable=1/g' /etc/php/8.2/apache2/php.ini
+        sudo sed -i 's/;opcache.interned_strings_buffer=8/opcache.interned_strings_buffer=8/g' /etc/php/8.2/apache2/php.ini
+        sudo sed -i 's/;opcache.max_accelerated_files=10000/opcache.max_accelerated_files=10000/g' /etc/php/8.2/apache2/php.ini
+        sudo sed -i 's/;opcache.memory_consumption=128/opcache.memory_consumption=128/g' /etc/php/8.2/apache2/php.ini
+        sudo sed -i 's/;opcache.save_comments=1/opcache.save_comments=1/g' /etc/php/8.2/apache2/php.ini
+        sudo sed -i 's/;opcache.revalidate_freq=2/opcache.revalidate_freq=1/g' /etc/php/8.2/apache2/php.ini
+
+       # провести проверку через cat снова, результат ниже:
+
+        memory_limit = 512M
+        upload_max_filesize = 200M
+        max_execution_time = 360
+        post_max_size = 200M
+        date.timezone = Europe/Kiev
+        opcache.enable=1
+        opcache.interned_strings_buffer=8
+        opcache.max_accelerated_files=10000
+        opcache.memory_consumption=128
+        opcache.save_comments=1
+        opcache.revalidate_freq=1
+    
+    9. "Перепроверить модификаторы appache и перезагрузить appache"
+        
+        sudo a2enmod dir env headers mime rewrite ssl
+        
+        sudo systemctl restart apache2
+
+        Зайти на сайт и завершить настройку.
