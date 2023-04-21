@@ -1,11 +1,11 @@
 
-1. Установка обновлений 
+01. Установка обновлений 
 
     sudo apt update
     sudo apt upgrade
     sudo reboot
 
-2. Добавление  репозиторий новых версий php
+02. Добавление  репозиторий новых версий php
 
     sudo apt update 
     sudo apt install lsb-release
@@ -17,5 +17,44 @@
     sudo apt update
     sudo apt upgrade
     sudo reboot
+
+03. Установка и настройка NextCloud
+
+    1. Установка mariadb
+
+        sudo apt install mariadb-server
     
+    2. Первоначальная установка mariadb
+        
+        sudo mysql_secure_installation
+
+        Enter current password for root (enter for none): # Жмякаем enter так как у нас нету пароля
+
+        Switch to unix_socket authentication [Y/n] : y 
+
+        Change the root password? [Y/n]: y
+
+        Remove anonymous users? [Y/n]: y
+
+        Disallow root login remotely? [Y/n]: y
+
+        Remove test database and access to it? [Y/n]: y
+
+        Reload privilege tables now? [Y/n]: y
+
+    3.  Создаем базу данных NextCloud
+
+        sudo mariadb
+
+        CREATE DATABASE nextcloud;
+
+        GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextcloud'@'localhost' IDENTIFIED BY 'mypassword'; # Там где mypassword меняем на свой;
+
+        FLUSH PRIVILEGES;
+
+        exit
+
+
+
+       
 
