@@ -130,7 +130,7 @@ cat /etc/php/8.2/apache2/php.ini | grep 'opcache.revalidate_freq='
 
 sudo sed -i 's/memory_limit = 128M/memory_limit = 512M/g' /etc/php/8.2/apache2/php.ini
 sudo sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 16384M/g' /etc/php/8.2/apache2/php.ini
-sudo sed -i 's/max_execution_time = 30/max_execution_time = 360/g' /etc/php/8.2/apache2/php.ini
+sudo sed -i 's/max_execution_time = 30/max_execution_time = 3600/g' /etc/php/8.2/apache2/php.ini
 sudo sed -i 's/post_max_size = 8M/post_max_size = 16384M/g' /etc/php/8.2/apache2/php.ini
 sudo sed -i 's/;date.timezone =/date.timezone = Europe\/Kiev/g' /etc/php/8.2/apache2/php.ini
 sudo sed -i 's/;opcache.enable=1/opcache.enable=1/g' /etc/php/8.2/apache2/php.ini
@@ -144,7 +144,7 @@ sudo sed -i 's/;opcache.revalidate_freq=2/opcache.revalidate_freq=1/g' /etc/php/
 
 memory_limit = 512M
 upload_max_filesize = 16384M
-max_execution_time = 360
+max_execution_time = 3600
 post_max_size = 16384M
 date.timezone = Europe/Kiev
 opcache.enable=1
