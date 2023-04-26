@@ -230,3 +230,18 @@ sudo nano /etc/apache2/sites-available/nc-redir.conf
 
 sudo systemctl restart apache2
 
+4. Настройка cron 
+
+sudo apt install cron
+sudo systemctl enable cron
+
+sudo crontab -e
+
+*/5  *  *  *  * sudo -u www-data  php -f /var/www/nextcloud/cron.php # вставить в конце, не забыть про перенос на новую строку в конце
+
+sudo crontab -l
+
+sudo chmod a+x /var/www/nextcloud/cron.php
+
+# Переходим в nextcloud , параметры сервера основые настройки и включаем cron
+
