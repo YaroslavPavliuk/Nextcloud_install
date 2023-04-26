@@ -255,3 +255,6 @@ sudo nano /var/www/nextcloud/config/config.php
 'config_is_read_only' => false,
 'maintenance' => false,
 
+6. Убираем ошибку  Модуль php-imagick в этом случае не поддерживает SVG
+
+sudo apt install libmagickcore-6.q16-6-extra
