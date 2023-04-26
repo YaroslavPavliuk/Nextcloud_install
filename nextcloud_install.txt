@@ -264,3 +264,25 @@ sudo nano /var/www/nextcloud/config/config.php
 
 sudo apt install libmagickcore-6.q16-6-extra
 
+7. Настройка кэширования с помощью radis
+
+sudo apt install redis-server php-redis
+
+ps ax | grep redis
+
+sudo usermod -a -G redis www-data
+
+sudo systemctl restart apache2
+
+sudo nano /var/www/nextcloud/config/config.php
+
+'memcache.local' => '\\OC\\Memcache\\Redis',
+'redis' => array(
+    'host' => 'localhost',
+    'port' => 6379,
+),
+
+sudo systemctl restart apache2
+
+redis-cli ping # проверяем, если у нас появилась надпись pong то значит все получилось.
+
