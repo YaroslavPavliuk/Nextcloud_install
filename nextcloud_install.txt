@@ -166,7 +166,7 @@ sudo systemctl restart apache2
 05 Дополнительная настройка NextCloud
 
 
-1 Установка и настройка certbot
+1. Установка и настройка certbot
 
 # Перед установкой добавлем свой домен
 
@@ -202,3 +202,14 @@ array (
 sudo certbot renew --dry-run  #тестируем если все ок переходим дальше
 
 
+2. Enabling Strict Transport Security
+
+sudo nano /etc/apache2/sites-available/nextcloud-le-ssl.conf
+
+<IfModule mod_ssl.c>
+<VirtualHost *:443>
+  ............
+  Header always set Strict-Transport-Security "max-age=15552000; includeSubDomains" # добавить эту строку
+  ............
+</VirtualHost>
+</IfModule>
