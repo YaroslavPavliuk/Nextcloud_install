@@ -213,3 +213,20 @@ sudo nano /etc/apache2/sites-available/nextcloud-le-ssl.conf
   ............
 </VirtualHost>
 </IfModule>
+
+3. Reditect to 443
+
+Создаем файл и сохраняем 
+
+sudo nano /etc/apache2/sites-available/nc-redir.conf
+
+<VirtualHost *:80>
+   ServerName твой домен
+
+   RewriteEngine On
+   RewriteCond %{HTTPS} off
+   RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]
+</VirtualHost>
+
+sudo systemctl restart apache2
+
