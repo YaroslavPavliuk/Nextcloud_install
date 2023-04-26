@@ -165,3 +165,40 @@ sudo systemctl restart apache2
 
 05 Дополнительная настройка NextCloud
 
+
+1 Установка и настройка certbot
+
+# Перед установкой добавлем свой домен
+
+sudo nano /var/www/nextcloud/config/config.php 
+
+'trusted_domains' =>
+array (
+    0 => 'твой домен',
+),
+
+# Установка
+
+- sudo apt install snapd
+
+- sudo snap install core; sudo snap refresh core
+
+- sudo snap install --classic certbot
+
+- sudo ln -s /snap/bin/certbot /usr/bin/certbot
+
+# Настройка 
+
+- sudo certbot --apache
+
+- вводим свой адресс почты
+
+- соглашаемся с условиями Y
+
+- отказываемся от рассылки на почту n
+
+- вводим свой домен который прописали выше 
+
+sudo certbot renew --dry-run  #тестируем если все ок переходим дальше
+
+
