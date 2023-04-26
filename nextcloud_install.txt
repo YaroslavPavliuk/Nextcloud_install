@@ -108,9 +108,7 @@ sudo nano /etc/apache2/sites-available/nextcloud.conf # И вставляем с
 
 sudo a2ensite nextcloud.conf
 
-8. Конфигурирование apache сервера
-
-sudo nano /etc/php/8.2/apache2/php.ini
+8. Конфигурация apache сервера
 
 # провести проверку текущих настроек через cat
 
@@ -143,9 +141,9 @@ sudo sed -i 's/;opcache.revalidate_freq=2/opcache.revalidate_freq=1/g' /etc/php/
 # провести проверку через cat снова, результат ниже:
 
 memory_limit = 512M
-upload_max_filesize = 16384M
+upload_max_filesize = 16G
 max_execution_time = 3600
-post_max_size = 16384M
+post_max_size = 16G
 date.timezone = Europe/Kiev
 opcache.enable=1
 opcache.interned_strings_buffer=8
@@ -153,7 +151,15 @@ opcache.max_accelerated_files=10000
 opcache.memory_consumption=128
 opcache.save_comments=1
 opcache.revalidate_freq=1
-    
+
+sudo nano /etc/php/8.2/apache2/php.ini
+
+# Ищем и изменяем
+
+max_file_uploads 1 # Если у вас расберри то делаем 1. Если у вас мощный сервер то можно оставить по дефолту
+
+max_input_time 3600
+
 9. "Перепроверить модификаторы appache и перезагрузить appache"
         
 sudo a2enmod dir env headers mime rewrite ssl
@@ -258,3 +264,4 @@ sudo nano /var/www/nextcloud/config/config.php
 6. Убираем ошибку  Модуль php-imagick в этом случае не поддерживает SVG
 
 sudo apt install libmagickcore-6.q16-6-extra
+
