@@ -161,3 +161,7 @@ sudo a2enmod dir env headers mime rewrite ssl
 sudo systemctl restart apache2
 
 Зайти на сайт и завершить настройку.
+
+
+05 Дополнительная настройка NextCloud
+
